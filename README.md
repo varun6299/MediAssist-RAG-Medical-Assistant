@@ -1,7 +1,9 @@
 # 🩺 MediAssist — RAG-based Medical Assistant  
 *A Retrieval-Augmented Generation (RAG) system that leverages trusted medical manuals to provide accurate, reliable, and context-grounded clinical information.*
 
----
+<p align="center">
+  <img src="images/MediAssistant_Image.png" width="600"/>
+</p>
 
 ## 📦 Packages Used
 [![Python](https://img.shields.io/badge/Python-3.8+-blue.svg)](https://www.python.org/)  
@@ -47,6 +49,10 @@ The goals of MediAssist are to:
 
 The system was developed in **nine structured steps** (MediAssist Framework):
 
+<p align="center">
+  <img src="images/MediAssistant RAG.png" width="600"/>
+</p>
+
 ### 1. Define Problem & Objectives  
 - Established key clinical use cases: diagnostics, treatments, emergency protocols.  
 - Identified the need to minimize **hallucinations** while ensuring **completeness** of answers.  
@@ -74,6 +80,10 @@ The system was developed in **nine structured steps** (MediAssist Framework):
 - Indexed metadata alongside vectors for citation retrieval.  
 - Configured **similarity search (top-k retrieval)** to pull the most relevant sections for each query.  
 
+<p align="center">
+  <img src="images/MediAssistant RAG LLM Instance.png" width="600"/>
+</p>
+
 ### 7. Retriever Configuration  
 - Implemented a **retrieval pipeline**:  
   1. Embed user query.  
@@ -86,7 +96,11 @@ The system was developed in **nine structured steps** (MediAssist Framework):
 - Prompt assembly combined: **retrieved chunks + engineered prompt template**.  
 - Guardrails:  
   - “No-answer” fallback if no relevant context retrieved.  
-  - Forced citation of source sections.  
+  - Forced citation of source sections.
+ 
+<p align="center">
+  <img src="images/MediAssistant Response Function.png" width="600"/>
+</p>
 
 ### 9. Fine-Tuning & Evaluation  
 - Iteratively adjusted configs (k, temperature, top_p).  
