@@ -92,11 +92,10 @@ The system was developed in **nine structured steps** (MediAssist Framework):
 - Fine-tuned parameters: retrieval depth, score threshold, and token window size.  
 
 ### 8. RAG Implementation  
-- Integrated retriever with **LLaMA LLM (via llama.cpp)** using LangChain.  
-- Prompt assembly combined: **retrieved chunks + engineered prompt template**.  
+- Integrated retriever with **Mistral-7B-Instruct (quantized GGUF via `llama.cpp`)** using LangChain.  
 - Guardrails:  
-  - “No-answer” fallback if no relevant context retrieved.  
-  - Forced citation of source sections.
+  - “No-answer” fallback if retrieval score too low.  
+  - Forced citations for every answer.  
  
 <p align="center">
   <img src="images/MediAssistant Response Function.png" width="600"/>
@@ -109,16 +108,25 @@ The system was developed in **nine structured steps** (MediAssist Framework):
 
 ---
 
+
+## 🤖 Modeling Approach
+- **LLM Backbone:** [Mistral-7B-Instruct v0.2 (GGUF, Q2_K quantized)](https://huggingface.co/TheBloke/Mistral-7B-Instruct-v0.2-GGUF).  
+- **Inference Engine:** [`llama.cpp`](https://github.com/ggerganov/llama.cpp) for efficient local inference.  
+- **RAG Orchestration:** LangChain pipeline for retrieval + generation.  
+- **Prompts:** Instruction-style templates + retrieved context performed best.  
+
+---
+
 ## 📏 Evaluation Metrics
 MediAssist responses were scored on:  
-- **Groundedness** – factual alignment with retrieved manual text.  
-- **Completeness** – coverage of all sub-parts of the query.  
-- **Relevance** – clinical appropriateness of the information.  
-- **Clarity** – concise and usable by healthcare providers.  
+- **Groundedness** – factual alignment with retrieved text.  
+- **Completeness** – coverage of multi-part clinical queries.  
+- **Relevance** – clinical appropriateness.  
+- **Clarity** – concise, usable language for clinicians.  
 
-### Why RAG > LLM-only?  
-- **LLM-only:** Fluent but often hallucinated or incomplete.  
-- **RAG:** Reliable, evidence-backed answers with clear source citations.  
+👉 **Why RAG with Mistral-7B > LLM-only?**  
+- LLM-only: Fluent but hallucinated and incomplete.  
+- RAG + Mistral: Reliable, fact-based, with clear source citations.  
 
 ---
 
@@ -126,25 +134,23 @@ MediAssist responses were scored on:
 
 | Setup                         | Strengths | Weaknesses | Best Use Case |
 |-------------------------------|-----------|------------|---------------|
-| **Baseline LLM**              | Fluent answers | Frequent hallucinations | Not recommended |
+| **Baseline LLM (Mistral only)** | Fluent answers | Frequent hallucinations | Not recommended |
 | **RAG – Default Setup**       | Reliable grounding | Partial answers | Prototyping |
 | **Fine-Tuned RAG Config 2**   | High completeness, accurate, structured | Slightly slower | Clinical support |
 | **Fine-Tuned RAG Config 3**   | Balanced, concise, efficient | Some oversimplification | General-purpose assistants |
 
 **Best Performing Setup:**  
-- **RAG + Instruction-based prompts** with `k=5`, `temperature=0.3`.  
-- Produced the **most complete and clinically accurate responses**, with clear structure and citations.  
+- **RAG + Instruction-based prompts with Mistral-7B-Instruct** (`k=5`, `temp=0.3`).  
+- Produced the **most accurate, complete, and reliable answers** with citations.  
 
 ---
 
 ## 💡 Insights & Business Impact
-- **Accuracy & Trust:** Anchoring responses in Merck Manual eliminates hallucinations.  
+- **Accuracy & Trust:** Anchoring in Merck Manual reduces hallucinations.  
 - **Efficiency:** Saves **minutes per query**, critical in emergencies.  
-- **Consistency:** Standardizes clinical guidance across practitioners.  
-- **Scalability:** Approach can extend to other domains like oncology, drug safety, or treatment protocols.  
-- **Prototype Feasibility:** Successfully queries a **4,000+ page manual** in seconds.  
+- **Consistency:** Standardized medical guidance across providers.  
+- **Scalability:** Extendable to other specialties (oncology, pharmacology).  
+- **Feasibility:** Demonstrated querying **4,000+ page manual** in seconds.  
 
 📌 **Bottom Line:**  
-MediAssist demonstrates that GenAI + RAG can transform clinical decision-making by delivering **fast, reliable, and fact-grounded answers at scale**.  
-
----
+MediAssist proves that **RAG + Mistral-7B-Instruct** can transform medical decision-making by delivering **fast, reliable, and context-grounded answers at scale**.  
